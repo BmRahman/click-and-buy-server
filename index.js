@@ -14,6 +14,15 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try{
+        const usersCollection = client.db('click&buy').collection('users');
+
+
+        // post users
+        app.post('/users', async(req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user)
+            res.send(result)
+        })
         
     }
     finally{
