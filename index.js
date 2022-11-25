@@ -36,6 +36,7 @@ function verifyJWT(req, res, next){
 async function run() {
     try{
         const usersCollection = client.db('click&buy').collection('users');
+        const productsCollection = client.db('click&buy').collection('products');
 
 
         // post users
@@ -50,6 +51,14 @@ async function run() {
             const query = {}
             const users = await usersCollection.find(query).toArray()
             res.send(users)
+        })
+
+        // get user by role
+        app.get('/users/:role', async(req, res) => {
+            const role = req.params.role;
+            const query = {role: role}
+            const user = await usersCollection.find(query).toArray()
+            res.send(user)
         })
 
          // issue jwt token
@@ -85,6 +94,13 @@ async function run() {
             const id = req.params.id;
             const filter = {_id: ObjectId(id)};
             const result = await usersCollection.deleteOne(filter);
+            res.send(result)
+        })
+
+        // post products
+        app.post('/products', async(req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product)
             res.send(result)
         })
         
