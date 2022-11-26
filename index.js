@@ -37,6 +37,8 @@ async function run() {
     try{
         const usersCollection = client.db('click&buy').collection('users');
         const productsCollection = client.db('click&buy').collection('products');
+        const bookingsCollection = client.db('click&buy').collection('bookings');
+
 
 
         // post users
@@ -119,7 +121,14 @@ async function run() {
             res.send(cat)
         })
 
-        // get apple products
+        // post bookings
+        app.post('/bookings', async(req, res) => {
+            const booking = req.body;
+            const result = await bookingsCollection.insertOne(booking)
+            res.send(result)
+        })
+
+       
         
     }
     finally{
