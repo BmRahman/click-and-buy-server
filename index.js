@@ -103,6 +103,23 @@ async function run() {
             const result = await productsCollection.insertOne(product)
             res.send(result)
         })
+
+        // // get products by category
+        // app.get('/allCategory', async(req, res) => {
+        //     const query = {}
+        //     const result = await productsCollection.find(query).project({category: 1}).toArray()
+        //     res.send(result)
+        // })
+
+        // get products by category
+        app.get('/products/:category', async(req, res) => {
+            const category = req.params.category;
+            const query = {category: category}
+            const cat = await productsCollection.find(query).toArray()
+            res.send(cat)
+        })
+
+        // get apple products
         
     }
     finally{
