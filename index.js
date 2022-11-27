@@ -38,6 +38,8 @@ async function run() {
         const usersCollection = client.db('click&buy').collection('users');
         const productsCollection = client.db('click&buy').collection('products');
         const bookingsCollection = client.db('click&buy').collection('bookings');
+        const advertisedCollection = client.db('click&buy').collection('advertised');
+
 
 
 
@@ -173,6 +175,45 @@ async function run() {
         const id = req.params.id;
         const filter = {_id: ObjectId(id)}
         const result = await productsCollection.deleteOne(filter)
+        res.send(result)
+    })
+
+
+    // get admin
+    app.get('/users/admin/:email', async(req, res) => {
+        const email = req.params.email;
+        const query = {email};
+        const user = await usersCollection.findOne(query);
+        res.send({isAdmin: user?.role === 'admin'})
+    }) 
+
+    // get seller
+    app.get('/users/seller/:email', async(req, res) => {
+        const email = req.params.email;
+        const query = {email};
+        const user = await usersCollection.findOne(query);
+        res.send({isSeller: user?.role === 'Seller'})
+    }) 
+
+    // get buyer
+    app.get('/users/buyer/:email', async(req, res) => {
+        const email = req.params.email;
+        const query = {email};
+        const user = await usersCollection.findOne(query);
+        res.send({isBuyer: user?.role === 'Buyer'})
+    }) 
+
+    // post advertised products
+    app.post('/advertised', async(req, res) => {
+        const advertise = req.body;
+            const result = await advertisedCollection.insertOne(advertise)
+            res.send(result)
+    })
+
+    // get advertised products
+    app.get('/advertised', async(req, res) => {
+        const query = {}
+        const result = await advertisedCollection.find(query).toArray()
         res.send(result)
     })
         
