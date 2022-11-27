@@ -90,6 +90,22 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updatedDoc, options)
             res.send(result)
         })
+        
+        // verify seller
+        app.put('/users/verified/:id', async(req, res) => {
+            
+
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const options = {upsert: true}
+            const updatedDoc = {
+                $set: {
+                    verified: 'yes'
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedDoc, options)
+            res.send(result)
+        })
 
         // delete user
         app.delete('/users/:id', async(req, res) => {
@@ -144,7 +160,21 @@ async function run() {
             res.send(result)
         })
 
-       
+       // get products by email
+       app.get('/products', async(req, res) => {
+        const email = req.query.email;
+        const query = {email: email};
+        const result = await productsCollection.find(query).toArray();
+        res.send(result)
+    })
+
+    // delete a product
+    app.delete('/products/:id', async(req, res) => {
+        const id = req.params.id;
+        const filter = {_id: ObjectId(id)}
+        const result = await productsCollection.deleteOne(filter)
+        res.send(result)
+    })
         
     }
     finally{
