@@ -195,6 +195,14 @@ async function run() {
         res.send({isSeller: user?.role === 'Seller'})
     }) 
 
+    // get verified seller
+    app.get('/users/verifiedseller/:email', async(req, res) => {
+        const email = req.params.email;
+        const query = {email};
+        const user = await usersCollection.findOne(query);
+        res.send({isVerified: user?.verified === 'yes'})
+    }) 
+
     // get buyer
     app.get('/users/buyer/:email', async(req, res) => {
         const email = req.params.email;
